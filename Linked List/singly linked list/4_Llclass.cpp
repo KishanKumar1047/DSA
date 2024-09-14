@@ -155,7 +155,7 @@ public:
         {
             cout << head->val << endl;
         }
-        else if (idx == size)
+        else if (idx == size-1)
         {
             cout << tail->val << endl;
         }

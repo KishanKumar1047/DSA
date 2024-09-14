@@ -1,0 +1,78 @@
+leetcode ka 61 --
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        ListNode* temp;
+        // temp = tail - 1
+        if(head==NULL) return NULL;
+        if(head->next==NULL) return head;
+        for(int i = 1 ; i<=k;i++){
+            temp = head ;
+            while(temp->next->next != NULL){ // tail-1
+            temp = temp->next;
+            }
+            temp->next->next = head;
+            head = temp->next;// insert
+            temp->next = NULL; // remove tail
+
+        }
+        return head;
+    }
+};
+
+=----
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    int size(ListNode* head){
+    ListNode* temp = head;
+     int n = 0;
+    while(temp !=NULL){
+        n++;
+        temp = temp->next;
+    }
+    return n;
+}
+    ListNode* rotateRight(ListNode* head, int k) {
+        int m =size(head);
+        if(head == nullptr) return nullptr;
+        if(m==k) return head;
+        ListNode* temp= head;
+        ListNode* tail= head;
+        int diff = 0;
+        if(k>m)  diff = m - (k % m);
+        else diff = m - k;
+        while(tail->next != NULL){ 
+            tail = tail->next;
+        }
+        for(int i = 1 ; i<diff;i++){
+            temp = temp->next;
+        } // temp ka value set ho gya
+        tail->next = head;
+        head = temp->next;
+        temp->next = NULL;
+
+        return head;
+    }
+};
+
