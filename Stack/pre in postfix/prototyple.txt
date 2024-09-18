@@ -1,0 +1,16 @@
+-----INFIX------ (with 2 stack)
+1. infix evaluation    ..A - ye alag concept
+2. infix ka evaluation with brackets // 2 & 3 only solve method change 
+3. infix to prefix 
+4. infix to postfix ((((3---4))same))
+
+----postfix--- (with 1 stack) ..B -- ye alag concept
+1. postfix evaluation  // 1 & 2 only solve method change 
+2. postfix to prefix
+3. postfix to infix   ((((2---3))same))
+
+
+------prefix---- (with 1 stack) 
+1. prefix evaluation  // 1 & 2 only solve method change 
+2. prefix to postfix
+3. prefix to infix    ((((2---3))same))
