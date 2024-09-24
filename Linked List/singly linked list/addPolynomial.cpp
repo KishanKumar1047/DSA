@@ -1,125 +1,135 @@
 #include <iostream>
 using namespace std;
 
-// Define a Node structure to represent each term in the polynomial
-struct Node {
+// Class to represent a node in the polynomial linked list
+class Node {
+public:
     int coeff;  // Coefficient of the term
     int exp;    // Exponent of the term
     Node* next; // Pointer to the next node
 
     // Constructor to create a new node
-    Node(int c, int e) {
-        coeff = c;
-        exp = e;
-        next = nullptr;
+    Node(int c, int e) : coeff(c), exp(e), next(nullptr) {}
+};
+
+// Class to represent a polynomial as a linked list of nodes
+class Polynomial {
+private:
+    Node* head;
+
+public:
+    // Constructor to initialize an empty polynomial
+    Polynomial() : head(nullptr) {}
+
+    // Function to insert a term into the polynomial
+    void insertTerm(int coeff, int exp) {
+        Node* newNode = new Node(coeff, exp);
+        
+        if (!head) {
+            head = newNode;
+            return;
+        }
+        
+        Node* temp = head;
+        // Insert the new node at the end of the list
+        while (temp->next) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
+    // Function to display the polynomial
+    void display() const {
+        Node* temp = head;
+        bool isFirst = true;  // To avoid printing + for the first term
+        while (temp != nullptr) {
+            if (!isFirst && temp->coeff >= 0) {
+                cout << " + ";
+            }
+            if (temp->exp == 0) {
+                cout << temp->coeff;  // No need for x^0
+            } else if (temp->exp == 1) {
+                cout << temp->coeff << "x";  // No need for x^1
+            } else {
+                cout << temp->coeff << "x^" << temp->exp;
+            }
+            temp = temp->next;
+            isFirst = false;
+        }
+        cout << endl;
+    }
+
+    // Function to add another polynomial to this polynomial
+    Polynomial addPolynomials(const Polynomial& other) const {
+        Polynomial result;
+        Node* p1 = head;
+        Node* p2 = other.head;
+
+        // Traverse both linked lists
+        while (p1 != nullptr && p2 != nullptr) {
+            if (p1->exp == p2->exp) {
+                // Add coefficients if exponents are equal
+                int sumCoeff = p1->coeff + p2->coeff;
+                if (sumCoeff != 0) {
+                    result.insertTerm(sumCoeff, p1->exp);
+                }
+                p1 = p1->next;
+                p2 = p2->next;
+            } else if (p1->exp > p2->exp) {
+                // Add term from p1 if its exponent is greater
+                result.insertTerm(p1->coeff, p1->exp);
+                p1 = p1->next;
+            } else {
+                // Add term from p2 if its exponent is greater
+                result.insertTerm(p2->coeff, p2->exp);
+                p2 = p2->next;
+            }
+        }
+
+        // If p1 has remaining terms, add them to result
+        while (p1 != nullptr) {
+            result.insertTerm(p1->coeff, p1->exp);
+            p1 = p1->next;
+        }
+
+        // If p2 has remaining terms, add them to result
+        while (p2 != nullptr) {
+            result.insertTerm(p2->coeff, p2->exp);
+            p2 = p2->next;
+        }
+
+        return result;
     }
 };
 
-// Function to insert a term into the polynomial list
-void insertTerm(Node*& poly, int coeff, int exp) {
-    Node* newNode = new Node(coeff, exp);
-    
-    if (!poly) {
-        poly = newNode;  // Insert at the head if the list is empty
-        return;
-    }
-    
-    Node* temp = poly;
-    // Insert the new term at the end of the list
-    while (temp->next) {
-        temp = temp->next;
-    }
-    temp->next = newNode;
-}
-
-// Function to display the polynomial
-void displayPoly(Node* poly) {
-    bool isFirst = true;  // To avoid printing + for the first term
-    while (poly != nullptr) {
-        if (!isFirst && poly->coeff >= 0) {
-            cout << " + ";
-        }
-        if (poly->exp == 0) {
-            cout << poly->coeff;  // No need for x^0
-        } else if (poly->exp == 1) {
-            cout << poly->coeff << "x";  // No need for x^1
-        } else {
-            cout << poly->coeff << "x^" << poly->exp;
-        }
-        poly = poly->next;
-        isFirst = false;
-    }
-    cout << endl;
-}
-
-// Function to add two polynomials represented by linked lists
-Node* addPolynomials(Node* poly1, Node* poly2) {
-    Node* result = nullptr;  // Resultant polynomial
-
-    // Traverse both linked lists
-    while (poly1 != nullptr && poly2 != nullptr) {
-        if (poly1->exp == poly2->exp) {
-            // Add coefficients if exponents are equal
-            int sumCoeff = poly1->coeff + poly2->coeff;
-            if (sumCoeff != 0) {
-                insertTerm(result, sumCoeff, poly1->exp);
-            }
-            poly1 = poly1->next;
-            poly2 = poly2->next;
-        } else if (poly1->exp > poly2->exp) {
-            // Add term from poly1 if its exponent is greater
-            insertTerm(result, poly1->coeff, poly1->exp);
-            poly1 = poly1->next;
-        } else {
-            // Add term from poly2 if its exponent is greater
-            insertTerm(result, poly2->coeff, poly2->exp);
-            poly2 = poly2->next;
-        }
-    }
-
-    // If poly1 has remaining terms, add them to result
-    while (poly1 != nullptr) {
-        insertTerm(result, poly1->coeff, poly1->exp);
-        poly1 = poly1->next;
-    }
-
-    // If poly2 has remaining terms, add them to result
-    while (poly2 != nullptr) {
-        insertTerm(result, poly2->coeff, poly2->exp);
-        poly2 = poly2->next;
-    }
-
-    return result;
-}
-
 int main() {
     // Create first polynomial: 2x^8 - 5x^7 - 3x^2 + 4
-    Node* poly1 = nullptr;
-    insertTerm(poly1, 2, 8);
-    insertTerm(poly1, -5, 7);
-    insertTerm(poly1, -3, 2);
-    insertTerm(poly1, 4, 0);
+    Polynomial poly1;
+    poly1.insertTerm(2, 8);
+    poly1.insertTerm(-5, 7);
+    poly1.insertTerm(-3, 2);
+    poly1.insertTerm(4, 0);
 
     // Create second polynomial: 5x^8 + 4x^6 + 2x^2 + x - 1
-    Node* poly2 = nullptr;
-    insertTerm(poly2, 5, 8);
-    insertTerm(poly2, 4, 6);
-    insertTerm(poly2, 2, 2);
-    insertTerm(poly2, 1, 1);
-    insertTerm(poly2, -1, 0);
+    Polynomial poly2;
+    poly2.insertTerm(5, 8);
+    poly2.insertTerm(4, 6);
+    poly2.insertTerm(2, 2);
+    poly2.insertTerm(1, 1);
+    poly2.insertTerm(-1, 0);
 
     // Display the polynomials
     cout << "Polynomial 1: ";
-    displayPoly(poly1);
+    poly1.display();
     cout << "Polynomial 2: ";
-    displayPoly(poly2);
+    poly2.display();
 
     // Add the two polynomials
-    Node* sum = addPolynomials(poly1, poly2);
+    Polynomial sum = poly1.addPolynomials(poly2);
 
     // Display the result
     cout << "Sum: ";
-    displayPoly(sum);
+    sum.display();
 
     return 0;
 }
