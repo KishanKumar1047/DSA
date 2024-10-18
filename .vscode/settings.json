@@ -62,6 +62,7 @@
     "new": "cpp",
     "vector": "cpp",
     "ostream": "cpp",
-    "unordered_map": "cpp"
+    "unordered_map": "cpp",
+    "stack": "cpp"
   }
 }

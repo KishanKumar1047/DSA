@@ -11,6 +11,7 @@ int main()
     {
         cout << str[i] << " ";
     }
+
     // cout << endl;
     // cout << str[5];
     // cout << endl;
